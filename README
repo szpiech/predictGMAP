@@ -1,0 +1,16 @@
+To compile, type make in the src/ directory.
+
+To test the program try ./predictGMAP --ref test.map --query test.query --out test.predicted.map
+
+This program is intended to take a reference genetic map and a set of query positions and output genetic map
+information at each query position.  If possible, missing query positions will be interpolated based on the 
+reference genetic map.  If a query position falls within a large gap in the reference map file, the position 
+is skipped.
+
+++++++++++Command Line Arguments++++++++++
+
+--help <bool> Prints this help dialog.
+--max-gap <double> If a gap of > MAX_GAP is encountered in the reference map file, do not interpolate in between. Default: 18848.64, dervied from the standard deviation in gap lengths from the HapMap genetic map.
+--out <string> The name of the output file. Default: predictGMAP.outfile.map
+--query <string> A list of physical positions at which you desire a genetic map.
+--ref <string> The reference genetic map file with format: <chr#> <locusID> <genetic pos> <physical pos>
