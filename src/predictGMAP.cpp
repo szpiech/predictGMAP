@@ -39,88 +39,88 @@ const string ARG_MAXGAP = "--max-gap";
 const double DEFAULT_MAXGAP = 18848.64;
 const string HELP_MAXGAP = "If a gap of > MAX_GAP is encountered in the reference map file, do not interpolate in between. Default: 18848.64, dervied from the standard deviation in gap lengths from the HapMap genetic map.";
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-  param_t params;
+    param_t params;
 
-  params.addFlag(ARG_REFMAP,DEFAULT_REFMAP,"refmapLabel",HELP_REFMAP);
-  params.addFlag(ARG_SNPLIST,DEFAULT_SNPLIST,"snplistLabel",HELP_SNPLIST);
-  params.addFlag(ARG_OUTFILE,DEFAULT_OUTFILE,"outfileLabel",HELP_OUTFILE);
-  params.addFlag(ARG_MAXGAP,DEFAULT_MAXGAP,"outfileLabel",HELP_MAXGAP);
+    params.addFlag(ARG_REFMAP, DEFAULT_REFMAP, "refmapLabel", HELP_REFMAP);
+    params.addFlag(ARG_SNPLIST, DEFAULT_SNPLIST, "snplistLabel", HELP_SNPLIST);
+    params.addFlag(ARG_OUTFILE, DEFAULT_OUTFILE, "outfileLabel", HELP_OUTFILE);
+    params.addFlag(ARG_MAXGAP, DEFAULT_MAXGAP, "outfileLabel", HELP_MAXGAP);
 
-  try
+    try
     {
-      params.parseCommandLine(argc,argv);
+        params.parseCommandLine(argc, argv);
     }
-  catch (...)
+    catch (...)
     {
-      return 1;
-    }
-
-  string refmapfile = params.getStringFlag(ARG_REFMAP);
-  string snplistfile = params.getStringFlag(ARG_SNPLIST);
-  string outfile = params.getStringFlag(ARG_OUTFILE);
-  double MAXGAP = params.getDoubleFlag(ARG_MAXGAP);
-
-
-  
-  // Start to read in query data
-  ifstream fin;
-  fin.open(snplistfile.c_str());
-  if(fin.fail())
-    {
-      cerr << "ERROR: could not open " << snplistfile << " for reading.\n";
-      return 1;
+        return 1;
     }
 
-  //Count the number of positions
-  int fileStart = fin.tellg();
-  int dataSize = 0;
-  double num;
-  while(1)
+    string refmapfile = params.getStringFlag(ARG_REFMAP);
+    string snplistfile = params.getStringFlag(ARG_SNPLIST);
+    string outfile = params.getStringFlag(ARG_OUTFILE);
+    double MAXGAP = params.getDoubleFlag(ARG_MAXGAP);
+
+
+
+    // Start to read in query data
+    ifstream fin;
+    fin.open(snplistfile.c_str());
+    if (fin.fail())
     {
-      fin >> num;
-      if(fin.eof()) break;
-      dataSize++;      
+        cerr << "ERROR: could not open " << snplistfile << " for reading.\n";
+        return 1;
     }
 
-  cerr << "Reading " << dataSize << " query positions.\n";
-
-  fin.clear();
-  fin.seekg(fileStart);
-
-  int* query = new int[dataSize];
-
-  for (int i = 0; i < dataSize; i++)
+    //Count the number of positions
+    int fileStart = fin.tellg();
+    int dataSize = 0;
+    double num;
+    while (1)
     {
-      fin >> query[i];
+        fin >> num;
+        if (fin.eof()) break;
+        dataSize++;
     }
 
-  fin.close();
+    cerr << "Reading " << dataSize << " query positions.\n";
 
-  ofstream fout;
-  fout.open(outfile.c_str());
-  if(fout.fail())
+    fin.clear();
+    fin.seekg(fileStart);
+
+    int *query = new int[dataSize];
+
+    for (int i = 0; i < dataSize; i++)
     {
-      cerr << "ERROR: could not open " << outfile << " for reading.\n";
+        fin >> query[i];
     }
 
-  MapData md(refmapfile,MAXGAP);
-  double gPos;
-  string locName, chr;
-  int current_index = 0;
+    fin.close();
 
-  for (int i = 0; i < dataSize; i++)
+    ofstream fout;
+    fout.open(outfile.c_str());
+    if (fout.fail())
     {
-      if(md.getMapInfo(query[i],gPos,locName,chr,current_index))
-	{
-	  fout << chr << "\t"
-	       << locName << "\t"
-	       << setprecision(15) << gPos << "\t"
-	       << query[i] << endl;
-	}
+        cerr << "ERROR: could not open " << outfile << " for reading.\n";
     }
-  fout.close();
-  
-  return 0;
+
+    MapData md(refmapfile, MAXGAP);
+    double gPos;
+    string locName, chr;
+    int current_index = 0;
+
+    for (int i = 0; i < dataSize; i++)
+    {
+        if (md.getMapInfo(query[i], gPos, locName, chr, current_index))
+        {
+            fout << chr << "\t"
+                 << locName << "\t"
+                 << setprecision(15) << gPos << "\t"
+                 << query[i] << endl;
+        }
+    }
+    fout.close();
+
+    return 0;
 }

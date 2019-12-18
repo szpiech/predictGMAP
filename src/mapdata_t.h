@@ -29,29 +29,29 @@ const int MISSING = -9999;
 
 class MapData
 {
- public:
-  MapData(string filename, double mGap);
-  ~MapData();
-  bool getMapInfo(int queryPos, double& gPos, string& locName, string& c,int& current_locus);
+public:
+    MapData(string filename, double mGap);
+    ~MapData();
+    bool getMapInfo(int queryPos, double &gPos, string &locName, string &c, int &current_locus);
 
- private:
-  int* physicalPos;
-  double* geneticPos;
-  string* locusName;
-  map<int,int> ppos2index;
-  int nloci;
-  string chr;
+private:
+    int *physicalPos;
+    double *geneticPos;
+    string *locusName;
+    map<int, int> ppos2index;
+    int nloci;
+    string chr;
 
-  double MAXGAP;
+    double MAXGAP;
 
-  int countFields(const string &str);
-  void initMapData(int n);
-  double interpolate(double x0, double y0, double x1, double y1, double query);
+    int countFields(const string &str);
+    void initMapData(int n);
+    double interpolate(double x0, double y0, double x1, double y1, double query);
 };
 
 inline double MapData::interpolate(double x0, double y0, double x1, double y1, double query)
 {
-  return ( ( (y1-y0) / (x1-x0) ) * query + ( y0 - ((y1-y0) / (x1-x0)) * x0 ) ); 
+    return ( ( (y1 - y0) / (x1 - x0) ) * query + ( y0 - ((y1 - y0) / (x1 - x0)) * x0 ) );
 }
 
 #endif
