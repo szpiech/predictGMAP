@@ -36,8 +36,8 @@ const string DEFAULT_OUTFILE = "predictGMAP.outfile.map";
 const string HELP_OUTFILE = "The name of the output file. Default: predictGMAP.outfile.map";
 
 const string ARG_MAXGAP = "--max-gap";
-const double DEFAULT_MAXGAP = 18848.64;
-const string HELP_MAXGAP = "If a gap of > MAX_GAP is encountered in the reference map file, do not interpolate in between. Default: 18848.64, dervied from the standard deviation in gap lengths from the HapMap genetic map.";
+const double DEFAULT_MAXGAP = 3e9;
+const string HELP_MAXGAP = "If a gap of > MAX_GAP is encountered in the reference map file, do not interpolate in between. Default: 3e9.";
 
 int main(int argc, char *argv[])
 {
